@@ -1,5 +1,11 @@
+<<<<<<< HEAD
 .vs/
 bin/
 obj/
+=======
+bin/
+obj/
+.vs/
+>>>>>>> c0abaf18c5b190b4385821fe94bbd5e1e8989e77
 *.user
 *.suo
