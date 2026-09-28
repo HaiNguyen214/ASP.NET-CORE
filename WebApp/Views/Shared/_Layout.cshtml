@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - WebApp</title>
+    <script type="importmap"></script>
+   
+    <link rel="stylesheet" href="~/css/bootstrap.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/core-style.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/font-awesome.min.css">
+</head>
+<body>
+    @await Html.PartialAsync("~/Views/Shared/Client/_Header.cshtml")
+            @RenderBody()
+    @await Html.PartialAsync("~/Views/Shared/Client/_Footer.cshtml")
+    <script src="~/js/jquery/jquery-2.2.4.min.js"></script>
+    <script src="~/js/popper.min.js"></script>
+    <script src="~/js/bootstrap.min.js"></script>
+    <script src="~/js/plugins.js"></script>
+    <script src="~/js/active.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
