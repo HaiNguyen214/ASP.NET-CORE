@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - Admin</title>
+
+    <link rel="stylesheet" href="~/admin/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/admin/css/metisMenu.min.css" />
+    <link rel="stylesheet" href="~/admin/css/timeline.css" />
+    <link rel="stylesheet" href="~/admin/css/startmin.css" />
+    <link rel="stylesheet" href="~/admin/css/morris.css" />
+    <link rel="stylesheet" href="~/admin/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="~/admin/css/dataTables.bootstrap.css" />
+    <link rel="stylesheet" href="~/admin/css/bootstrap-social.css" />
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        @await Html.PartialAsync("~/Views/Shared/Admin/_Header.cshtml")
+
+        @await Html.PartialAsync("~/Views/Shared/Admin/_Sidebar.cshtml")
+
+        <div id="page-wrapper">
+
+            @RenderBody()
+
+        </div>
+
+    </div>
+
+    <script src="~/admin/js/jquery.min.js"></script>
+    <script src="~/admin/js/bootstrap.min.js"></script>
+    <script src="~/admin/js/metisMenu.min.js"></script>
+
+    <script src="~/admin/js/startmin.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+
+</html>
