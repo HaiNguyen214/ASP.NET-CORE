@@ -28,9 +28,9 @@
         @await Html.PartialAsync("~/Views/Shared/Admin/_Sidebar.cshtml")
 
         <div id="page-wrapper">
-
-            @RenderBody()
-
+            <div class="container-fluid" style="padding-top: 25px;">
+                @RenderBody()
+            </div>
         </div>
 
     </div>

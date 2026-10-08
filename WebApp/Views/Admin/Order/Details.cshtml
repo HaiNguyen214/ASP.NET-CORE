@@ -1,0 +1,266 @@
+﻿@model WebApp.Models.Order
+
+@{
+    ViewData["Title"] = "Order Details";
+}
+
+<div class="row">
+
+    <div class="col-lg-12">
+
+        <h1 class="page-header">
+            Chi tiết đơn hàng #@Model.Id
+        </h1>
+
+    </div>
+
+</div>
+
+<div class="row">
+
+    <div class="col-md-6">
+
+        <div class="panel panel-default">
+
+            <div class="panel-heading">
+                Thông tin khách hàng
+            </div>
+
+            <div class="panel-body">
+
+                <p>
+                    <strong>Họ tên:</strong>
+                    @Model.CustomerName
+                </p>
+
+                <p>
+                    <strong>Số điện thoại:</strong>
+                    @Model.Phone
+                </p>
+
+                <p>
+                    <strong>Địa chỉ:</strong>
+                    @Model.Address
+                </p>
+
+                <p>
+                    <strong>Ngày đặt:</strong>
+                    @Model.OrderDate.ToString("dd/MM/yyyy HH:mm")
+                </p>
+
+                <p>
+                    <strong>Trạng thái:</strong>
+
+                    @if (Model.Status == "Pending")
+                    {
+                        <span class="label label-warning">
+                            Pending
+                        </span>
+                    }
+                    else if (Model.Status == "Confirmed")
+                    {
+                        <span class="label label-info">
+                            Confirmed
+                        </span>
+                    }
+                    else if (Model.Status == "Shipping")
+                    {
+                        <span class="label label-primary">
+                            Shipping
+                        </span>
+                    }
+                    else if (Model.Status == "Completed")
+                    {
+                        <span class="label label-success">
+                            Completed
+                        </span>
+                    }
+                    else if (Model.Status == "Cancelled")
+                    {
+                        <span class="label label-danger">
+                            Cancelled
+                        </span>
+                    }
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-6">
+
+        <div class="panel panel-default">
+
+            <div class="panel-heading">
+                Cập nhật trạng thái
+            </div>
+
+            <div class="panel-body">
+
+                <form asp-controller="Admin"
+                      asp-action="UpdateOrderStatus"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden"
+                           name="id"
+                           value="@Model.Id" />
+
+                    <select name="status"
+                            class="form-control">
+
+                        <option value="Pending"
+                                selected="@(Model.Status == "Pending")">
+                            Pending
+                        </option>
+
+                        <option value="Confirmed"
+                                selected="@(Model.Status == "Confirmed")">
+                            Confirmed
+                        </option>
+
+                        <option value="Shipping"
+                                selected="@(Model.Status == "Shipping")">
+                            Shipping
+                        </option>
+
+                        <option value="Completed"
+                                selected="@(Model.Status == "Completed")">
+                            Completed
+                        </option>
+
+                        <option value="Cancelled"
+                                selected="@(Model.Status == "Cancelled")">
+                            Cancelled
+                        </option>
+
+                    </select>
+
+                    <br />
+
+                    <button type="submit"
+                            class="btn btn-primary">
+
+                        <i class="fa fa-save"></i>
+                        Cập nhật
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="panel panel-default">
+
+    <div class="panel-heading">
+        Sản phẩm trong đơn hàng
+    </div>
+
+    <div class="panel-body">
+
+        @if (Model.OrderDetails == null ||
+             !Model.OrderDetails.Any())
+        {
+            <div class="alert alert-info">
+                Không có sản phẩm trong đơn hàng.
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+
+                <table class="table table-bordered table-striped">
+
+                    <thead>
+
+                        <tr>
+                            <th>Sản phẩm</th>
+                            <th>Giá</th>
+                            <th>Số lượng</th>
+                            <th>Thành tiền</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var detail in Model.OrderDetails)
+                        {
+                            <tr>
+
+                                <td>
+                                    @if (detail.Product != null)
+                                    {
+                                        @detail.Product.Name
+                                    }
+                                    else
+                                    {
+                                        <span>
+                                            Sản phẩm đã bị xóa
+                                        </span>
+                                    }
+                                </td>
+
+                                <td>
+                                    @detail.Price.ToString("N0") VNĐ
+                                </td>
+
+                                <td>
+                                    @detail.Quantity
+                                </td>
+
+                                <td>
+                                    @((detail.Price * detail.Quantity)
+                                        .ToString("N0")) VNĐ
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div class="text-right">
+
+                <h3>
+                    Tổng tiền:
+
+                    <strong>
+                        @Model.TotalAmount.ToString("N0") VNĐ
+                    </strong>
+                </h3>
+
+            </div>
+        }
+
+    </div>
+
+</div>
+
+
+<div style="margin-top:20px;">
+
+    <a href="/admin/order"
+       class="btn btn-default">
+
+        <i class="fa fa-arrow-left"></i>
+        Quay lại danh sách
+
+    </a>
+
+</div>

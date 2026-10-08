@@ -1,25 +1,26 @@
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
-using WebApp.Models;
+using Microsoft.EntityFrameworkCore;
+using WebApp.Data;
 
 namespace WebApp.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly ApplicationDbContext _context;
+
+        public HomeController(ApplicationDbContext context)
         {
-            return View();
+            _context = context;
         }
 
-        public IActionResult Privacy()
+        public async Task<IActionResult> Index()
         {
-            return View();
-        }
+             var products = await _context.Products
+                .Include(p => p.Category)
+                .Where(p => p.Status)
+                .ToListAsync();
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View("~/Views/ProductClient/Index.cshtml", products);
         }
     }
 }

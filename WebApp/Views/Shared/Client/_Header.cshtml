@@ -1,4 +1,16 @@
-﻿<header class="header_area">
+﻿@using WebApp.Extensions
+@using WebApp.Models
+
+@{
+    var cart = Context.Session.GetObject<List<CartItem>>("Cart")
+        ?? new List<CartItem>();
+
+    var cartCount = cart.Sum(x => x.Quantity);
+    var cartTotal = cart.Sum(x => x.Total);
+}
+
+<header class="header_area">
+
     <!-- Top Header Area Start -->
     <div class="top_header_area">
         <div class="container h-100">
@@ -6,96 +18,328 @@
 
                 <div class="col-12 col-lg-7">
                     <div class="top_single_area d-flex align-items-center">
+
                         <!-- Logo Area -->
                         <div class="top_logo">
-                            <a href="#"><img src="~/img/core-img/logo.png" alt=""></a>
+                            <a href="/">
+                                <img src="~/img/core-img/logo.png" alt="">
+                            </a>
                         </div>
+
                         <!-- Cart & Menu Area -->
                         <div class="header-cart-menu d-flex align-items-center ml-auto">
+
                             <!-- Cart Area -->
                             <div class="cart">
-                                <a href="#" id="header-cart-btn" target="_blank"><span class="cart_quantity">2</span> <i class="ti-bag"></i> Your Bag $20</a>
+
+                                <a href="/ProductClient/Cart"
+                                   id="header-cart-btn">
+
+                                    <span class="cart_quantity">
+                                        @cartCount
+                                    </span>
+
+                                    <i class="ti-bag"></i>
+
+                                    Your Bag
+                                    @cartTotal.ToString("N0") VNĐ
+
+                                </a>
+
                                 <!-- Cart List Area Start -->
                                 <ul class="cart-list">
-                                    <li>
-                                        <a href="#" class="image"><img src="~/img/product-img/product-10.jpg" class="cart-thumb" alt=""></a>
-                                        <div class="cart-item-desc">
-                                            <h6><a href="#">Women's Fashion</a></h6>
-                                            <p>1x - <span class="price">$10</span></p>
-                                        </div>
-                                        <span class="dropdown-product-remove"><i class="icon-cross"></i></span>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="image"><img src="~/img/product-img/product-11.jpg" class="cart-thumb" alt=""></a>
-                                        <div class="cart-item-desc">
-                                            <h6><a href="#">Women's Fashion</a></h6>
-                                            <p>1x - <span class="price">$10</span></p>
-                                        </div>
-                                        <span class="dropdown-product-remove"><i class="icon-cross"></i></span>
-                                    </li>
-                                    <li class="total">
-                                        <span class="pull-right">Total: $20.00</span>
-                                        <a href="cart.html" class="btn btn-sm btn-cart">Cart</a>
-                                        <a href="checkout-1.html" class="btn btn-sm btn-checkout">Checkout</a>
-                                    </li>
+
+                                    @if (!cart.Any())
+                                    {
+                                        <li>
+                                            <div class="cart-item-desc">
+                                                <h6>
+                                                    Giỏ hàng
+                                                </h6>
+
+                                                <p>
+                                                    Giỏ hàng đang trống.
+                                                </p>
+                                            </div>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        foreach (var item in cart)
+                                        {
+                                            <li>
+
+                                                <!-- Product Image -->
+                                                <a href="/ProductClient/Details/@item.ProductId"
+                                                   class="image">
+
+                                                    <img src="@item.Image"
+                                                         class="cart-thumb"
+                                                         alt="@item.ProductName">
+
+                                                </a>
+
+                                                <!-- Product Information -->
+                                                <div class="cart-item-desc">
+
+                                                    <h6>
+                                                        <a href="/ProductClient/Details/@item.ProductId">
+                                                            @item.ProductName
+                                                        </a>
+                                                    </h6>
+
+                                                    <p>
+                                                        @item.Quantity x
+
+                                                        <span class="price">
+                                                            @item.Price.ToString("N0") VNĐ
+                                                        </span>
+                                                    </p>
+
+                                                </div>
+
+                                            </li>
+                                        }
+
+                                        <!-- Cart Total -->
+                                        <li class="total">
+
+                                            <span class="pull-right">
+                                                Total:
+                                                @cartTotal.ToString("N0") VNĐ
+                                            </span>
+
+                                            <a href="/ProductClient/Cart"
+                                               class="btn btn-sm btn-cart">
+                                                Cart
+                                            </a>
+
+                                            <a href="/ProductClient/Checkout"
+                                               class="btn btn-sm btn-checkout">
+                                                Checkout
+                                            </a>
+
+                                        </li>
+                                    }
+
                                 </ul>
+                                <!-- Cart List Area End -->
+
                             </div>
+                            <!-- Cart Area End -->
+                            <!-- Menu Button -->
                             <div class="header-right-side-menu ml-15">
-                                <a href="#" id="sideMenuBtn"><i class="ti-menu" aria-hidden="true"></i></a>
+
+                                <a href="#"
+                                   id="sideMenuBtn">
+
+                                    <i class="ti-menu"
+                                       aria-hidden="true"></i>
+
+                                </a>
+
                             </div>
+
                         </div>
+                        <!-- Cart & Menu Area End -->
+
                     </div>
                 </div>
 
             </div>
         </div>
     </div>
-
-<!-- Top Header Area End -->
+    <!-- Top Header Area End -->
+    <!-- Main Header Area Start -->
     <div class="main_header_area">
+
         <div class="container h-100">
+
             <div class="row h-100">
+
                 <div class="col-12 d-md-flex justify-content-between">
+
                     <!-- Header Social Area -->
                     <div class="header-social-area">
-                        <a href="#"><span class="karl-level">Share</span> <i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                        <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                        <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                        <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+
+                        <a href="#">
+                            <span class="karl-level">
+                                Share
+                            </span>
+
+                            <i class="fa fa-pinterest"
+                               aria-hidden="true"></i>
+                        </a>
+
+                        <a href="#">
+                            <i class="fa fa-facebook"
+                               aria-hidden="true"></i>
+                        </a>
+
+                        <a href="#">
+                            <i class="fa fa-twitter"
+                               aria-hidden="true"></i>
+                        </a>
+
+                        <a href="#">
+                            <i class="fa fa-linkedin"
+                               aria-hidden="true"></i>
+                        </a>
+
                     </div>
+                    <!-- Header Social Area End -->
                     <!-- Menu Area -->
                     <div class="main-menu-area">
+
                         <nav class="navbar navbar-expand-lg align-items-start">
 
-                            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#karl-navbar" aria-controls="karl-navbar" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"><i class="ti-menu"></i></span></button>
+                            <!-- Mobile Menu Button -->
+                            <button class="navbar-toggler"
+                                    type="button"
+                                    data-toggle="collapse"
+                                    data-target="#karl-navbar"
+                                    aria-controls="karl-navbar"
+                                    aria-expanded="false"
+                                    aria-label="Toggle navigation">
 
-                            <div class="collapse navbar-collapse align-items-start" id="karl-navbar">
-                                <ul class="navbar-nav animated" id="nav">
-                                    <li class="nav-item active"><a class="nav-link" href="/">Home</a></li>
-                                    <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle" href="#" id="karlDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pages</a>
-                                        <div class="dropdown-menu" aria-labelledby="karlDropdown">
-                                            <a class="dropdown-item" href="/">Home</a>
-                                            <a class="dropdown-item" href="/Product/Shop">Shop</a>
-                                            <a class="dropdown-item" href="/Product/ProductDetail">Product Details</a>
-                                            <a class="dropdown-item" href="/Product/Cart">Cart</a>
-                                            <a class="dropdown-item" href="/Product/Checkout">Checkout</a>
-                                        </div>
+                                <span class="navbar-toggler-icon">
+                                    <i class="ti-menu"></i>
+                                </span>
+
+                            </button>
+
+
+                            <!-- Menu -->
+                            <div class="collapse navbar-collapse align-items-start"
+                                 id="karl-navbar">
+
+                                <ul class="navbar-nav animated"
+                                    id="nav">
+
+                                    <!-- Home -->
+                                    <li class="nav-item active">
+
+                                        <a class="nav-link"
+                                           href="/">
+                                            Home
+                                        </a>
+
                                     </li>
-                                    <li class="nav-item"><a class="nav-link" href="#">Dresses</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="#"><span class="karl-level">hot</span> Shoes</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+
+
+                                    <!-- Pages -->
+                                    <li class="nav-item dropdown">
+
+                                        <a class="nav-link dropdown-toggle"
+                                           href="#"
+                                           id="karlDropdown"
+                                           role="button"
+                                           data-toggle="dropdown"
+                                           aria-haspopup="true"
+                                           aria-expanded="false">
+
+                                            Pages
+
+                                        </a>
+
+
+                                        <div class="dropdown-menu"
+                                             aria-labelledby="karlDropdown">
+
+                                            <a class="dropdown-item"
+                                               href="/">
+                                                Home
+                                            </a>
+
+                                            <a class="dropdown-item"
+                                               href="/ProductClient/Shop">
+                                                Shop
+                                            </a>
+
+                                            <a class="dropdown-item"
+                                               href="/ProductClient/Cart">
+                                                Cart
+                                            </a>
+
+                                            <a class="dropdown-item"
+                                               href="/ProductClient/Checkout">
+                                                Checkout
+                                            </a>
+
+                                        </div>
+
+                                    </li>
+
+
+                                    <!-- Dresses -->
+                                    <li class="nav-item">
+
+                                        <a class="nav-link"
+                                           href="#">
+                                            Dresses
+                                        </a>
+
+                                    </li>
+
+
+                                    <!-- Shoes -->
+                                    <li class="nav-item">
+
+                                        <a class="nav-link"
+                                           href="#">
+
+                                            <span class="karl-level">
+                                                hot
+                                            </span>
+
+                                            Shoes
+
+                                        </a>
+
+                                    </li>
+
+
+                                    <!-- Contact -->
+                                    <li class="nav-item">
+
+                                        <a class="nav-link"
+                                           href="#">
+                                            Contact
+                                        </a>
+
+                                    </li>
+
                                 </ul>
+
                             </div>
+
                         </nav>
+
                     </div>
+                    <!-- Menu Area End -->
                     <!-- Help Line -->
                     <div class="help-line">
-                        <a href="tel:+346573556778"><i class="ti-headphone-alt"></i> +34 657 3556 778</a>
+
+                        <a href="tel:+346573556778">
+
+                            <i class="ti-headphone-alt"></i>
+
+                            +34 657 3556 778
+
+                        </a>
+
                     </div>
+                    <!-- Help Line End -->
+
                 </div>
+
             </div>
+
         </div>
+
     </div>
+    <!-- Main Header Area End -->
+
 </header>
+
 <!-- ****** Header Area End ****** -->

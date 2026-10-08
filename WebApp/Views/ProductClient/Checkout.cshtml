@@ -1,0 +1,483 @@
+﻿@model WebApp.Models.Order
+
+@using WebApp.Extensions
+@using WebApp.Models
+
+@{
+    ViewData["Title"] = "Checkout";
+
+    var cart = Context.Session.GetObject<List<CartItem>>("Cart")
+        ?? new List<CartItem>();
+
+    var total = cart.Sum(x => x.Total);
+}
+
+<section class="top-discount-area d-md-flex align-items-center">
+
+    <div class="single-discount-area">
+        <h5>Free Shipping &amp; Returns</h5>
+        <h6>
+            <a href="/ProductClient/Shop">
+                BUY NOW
+            </a>
+        </h6>
+    </div>
+
+    <div class="single-discount-area">
+        <h5>20% Discount for all dresses</h5>
+        <h6>USE CODE: Colorlib</h6>
+    </div>
+
+    <div class="single-discount-area">
+        <h5>20% Discount for students</h5>
+        <h6>USE CODE: Colorlib</h6>
+    </div>
+
+</section>
+
+<!-- ****** Checkout Area Start ****** -->
+
+<div class="checkout_area section_padding_100">
+
+    <div class="container">
+
+        <div class="row">
+
+            <!-- BILLING ADDRESS -->
+
+            <div class="col-12 col-md-6">
+
+                <div class="checkout_details_area mt-50 clearfix">
+
+                    <div class="cart-page-heading">
+
+                        <h5>Billing Address</h5>
+
+                        <p>
+                            Please enter your information
+                        </p>
+
+                    </div>
+
+                    <form asp-controller="ProductClient"
+                          asp-action="Checkout"
+                          method="post">
+
+                        @Html.AntiForgeryToken()
+
+                        <div class="row">
+
+                            <div class="col-12 mb-3">
+
+                                <label for="CustomerName">
+                                    Full Name
+                                    <span>*</span>
+                                </label>
+
+                                <input asp-for="CustomerName"
+                                       type="text"
+                                       class="form-control"
+                                       id="CustomerName"
+                                       placeholder="Enter your full name"
+                                       required>
+
+                                <span asp-validation-for="CustomerName"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                            <div class="col-12 mb-3">
+
+                                <label for="Phone">
+                                    Phone No
+                                    <span>*</span>
+                                </label>
+
+                                <input asp-for="Phone"
+                                       type="text"
+                                       class="form-control"
+                                       id="Phone"
+                                       placeholder="Enter your phone number"
+                                       required>
+
+                                <span asp-validation-for="Phone"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                            <div class="col-12 mb-3">
+
+                                <label for="Address">
+                                    Address
+                                    <span>*</span>
+                                </label>
+
+                                <textarea asp-for="Address"
+                                          class="form-control"
+                                          id="Address"
+                                          rows="4"
+                                          placeholder="Enter your delivery address"
+                                          required></textarea>
+
+                                <span asp-validation-for="Address"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                            <div class="col-12 mb-3">
+
+                                <label>
+                                    Country
+                                </label>
+
+                                <select class="custom-select d-block w-100">
+
+                                    <option>
+                                        Vietnam
+                                    </option>
+
+                                    <option>
+                                        United States
+                                    </option>
+
+                                    <option>
+                                        United Kingdom
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="col-12 mb-3">
+
+                                <label>
+                                    City
+                                </label>
+
+                                <input type="text"
+                                       class="form-control"
+                                       value="Ho Chi Minh City">
+
+                            </div>
+
+                            <div class="col-12">
+
+                                <div class="custom-control custom-checkbox d-block mb-2">
+
+                                    <input type="checkbox"
+                                           class="custom-control-input"
+                                           id="customCheck1"
+                                           required>
+
+                                    <label class="custom-control-label"
+                                           for="customCheck1">
+
+                                        I agree to the terms and conditions
+
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- Nút đặt hàng nằm trong FORM -->
+
+                        <button type="submit"
+                                class="btn karl-checkout-btn"
+                                style="border:none;">
+
+                            Place Order
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+
+            <!-- ORDER DETAILS -->
+
+            <div class="col-12 col-md-6 col-lg-5 ml-lg-auto">
+
+                <div class="order-details-confirmation">
+
+                    <div class="cart-page-heading">
+
+                        <h5>Your Order</h5>
+
+                        <p>The Details</p>
+
+                    </div>
+
+                    <ul class="order-details-form mb-4">
+
+                        <li>
+                            <span>Product</span>
+                            <span>Total</span>
+                        </li>
+
+                        @if (cart.Any())
+                        {
+                            foreach (var item in cart)
+                            {
+                                <li>
+
+                                    <span>
+                                        @item.ProductName
+                                        × @item.Quantity
+                                    </span>
+
+                                    <span>
+                                        @item.Total.ToString("N0") VNĐ
+                                    </span>
+
+                                </li>
+                            }
+                        }
+                        else
+                        {
+                            <li>
+
+                                <span>
+                                    Your cart is empty
+                                </span>
+
+                                <span>
+                                    0 VNĐ
+                                </span>
+
+                            </li>
+                        }
+
+                        <li>
+
+                            <span>Subtotal</span>
+
+                            <span>
+                                @total.ToString("N0") VNĐ
+                            </span>
+
+                        </li>
+
+                        <li>
+
+                            <span>Shipping</span>
+
+                            <span>
+                                Free
+                            </span>
+
+                        </li>
+
+                        <li>
+
+                            <span>Total</span>
+
+                            <span>
+                                @total.ToString("N0") VNĐ
+                            </span>
+
+                        </li>
+
+                    </ul>
+
+
+                    <!-- PAYMENT -->
+
+                    <div id="accordion"
+                         role="tablist"
+                         class="mb-4">
+
+                        <div class="card">
+
+                            <div class="card-header"
+                                 role="tab"
+                                 id="headingOne">
+
+                                <h6 class="mb-0">
+
+                                    <a data-toggle="collapse"
+                                       href="#collapseOne"
+                                       aria-expanded="false"
+                                       aria-controls="collapseOne">
+
+                                        <i class="fa fa-circle-o mr-3"></i>
+                                        Paypal
+
+                                    </a>
+
+                                </h6>
+
+                            </div>
+
+                            <div id="collapseOne"
+                                 class="collapse"
+                                 role="tabpanel"
+                                 aria-labelledby="headingOne"
+                                 data-parent="#accordion">
+
+                                <div class="card-body">
+
+                                    <p>
+                                        Paypal payment is currently
+                                        unavailable.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="card">
+
+                            <div class="card-header"
+                                 role="tab"
+                                 id="headingTwo">
+
+                                <h6 class="mb-0">
+
+                                    <a class="collapsed"
+                                       data-toggle="collapse"
+                                       href="#collapseTwo"
+                                       aria-expanded="false"
+                                       aria-controls="collapseTwo">
+
+                                        <i class="fa fa-circle-o mr-3"></i>
+                                        Cash on delivery
+
+                                    </a>
+
+                                </h6>
+
+                            </div>
+
+                            <div id="collapseTwo"
+                                 class="collapse"
+                                 role="tabpanel"
+                                 aria-labelledby="headingTwo"
+                                 data-parent="#accordion">
+
+                                <div class="card-body">
+
+                                    <p>
+                                        Pay when your order is delivered.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="card">
+
+                            <div class="card-header"
+                                 role="tab"
+                                 id="headingThree">
+
+                                <h6 class="mb-0">
+
+                                    <a class="collapsed"
+                                       data-toggle="collapse"
+                                       href="#collapseThree"
+                                       aria-expanded="false"
+                                       aria-controls="collapseThree">
+
+                                        <i class="fa fa-circle-o mr-3"></i>
+                                        Credit card
+
+                                    </a>
+
+                                </h6>
+
+                            </div>
+
+                            <div id="collapseThree"
+                                 class="collapse"
+                                 role="tabpanel"
+                                 aria-labelledby="headingThree"
+                                 data-parent="#accordion">
+
+                                <div class="card-body">
+
+                                    <p>
+                                        Credit card payment is currently
+                                        unavailable.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="card">
+
+                            <div class="card-header"
+                                 role="tab"
+                                 id="headingFour">
+
+                                <h6 class="mb-0">
+
+                                    <a class="collapsed"
+                                       data-toggle="collapse"
+                                       href="#collapseFour"
+                                       aria-expanded="false"
+                                       aria-controls="collapseFour">
+
+                                        <i class="fa fa-circle-o mr-3"></i>
+                                        Direct bank transfer
+
+                                    </a>
+
+                                </h6>
+
+                            </div>
+
+                            <div id="collapseFour"
+                                 class="collapse"
+                                 role="tabpanel"
+                                 aria-labelledby="headingFour"
+                                 data-parent="#accordion">
+
+                                <div class="card-body">
+
+                                    <p>
+                                        Bank transfer payment is currently
+                                        unavailable.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ****** Checkout Area End ****** -->
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

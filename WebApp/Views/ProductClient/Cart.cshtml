@@ -1,0 +1,171 @@
+﻿@model List<WebApp.Models.CartItem>
+
+@{
+    ViewData["Title"] = "Giỏ hàng";
+    var total = Model?.Sum(x => x.Total) ?? 0;
+}
+
+<div class="container" style="padding-top: 120px; padding-bottom: 80px;">
+
+    <div class="row">
+
+        <div class="col-12">
+
+            <h2 class="mb-4">
+                Giỏ hàng
+            </h2>
+
+            @if (Model == null || !Model.Any())
+            {
+                <div class="text-center" style="padding: 60px 0;">
+
+                    <i class="ti-shopping-cart"
+                       style="font-size: 60px;"></i>
+
+                    <h3 style="margin-top: 25px;">
+                        Giỏ hàng đang trống
+                    </h3>
+
+                    <p>
+                        Bạn chưa có sản phẩm nào trong giỏ hàng.
+                    </p>
+
+                    <a href="/ProductClient/Shop"
+                       class="btn btn-primary"
+                       style="margin-top: 15px;">
+                        TIẾP TỤC MUA HÀNG
+                    </a>
+
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+
+                    <table class="table">
+
+                        <thead>
+                            <tr>
+                                <th>Sản phẩm</th>
+                                <th>Giá</th>
+                                <th>Số lượng</th>
+                                <th>Thành tiền</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+
+                                    <td>
+
+                                        <div class="d-flex align-items-center">
+
+                                            <img src="@item.Image"
+                                                 alt="@item.ProductName"
+                                                 style="
+                                            width:80px;
+                                            height:80px;
+                                            object-fit:cover;
+                                            margin-right:15px;
+                                            " />
+
+                                            <span>
+                                                @item.ProductName
+                                            </span>
+
+                                        </div>
+
+                                    </td>
+
+                                    <td>
+                                        @item.Price.ToString("N0") VNĐ
+                                    </td>
+
+                                    <td>
+
+                                        <div class="d-flex align-items-center">
+
+                                            <a href="/ProductClient/DecreaseQuantity/@item.ProductId"
+                                               class="btn btn-sm btn-secondary">
+                                                -
+                                            </a>
+
+                                            <span style="
+                                                margin: 0 15px;
+                                                font-weight: bold;
+                                                ">
+                                                @item.Quantity
+                                            </span>
+
+                                            <a href="/ProductClient/IncreaseQuantity/@item.ProductId"
+                                               class="btn btn-sm btn-primary">
+                                                +
+                                            </a>
+
+                                        </div>
+
+                                    </td>
+
+                                    <td>
+                                        @item.Total.ToString("N0") VNĐ
+                                    </td>
+
+                                    <td>
+
+                                        <a href="/ProductClient/RemoveFromCart/@item.ProductId"
+                                           class="btn btn-sm btn-danger"
+                                           onclick="return confirm('Bạn có muốn xóa sản phẩm này không?');">
+                                            Xóa
+                                        </a>
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                <div class="row mt-4">
+
+                    <div class="col-12 col-md-6">
+
+                        <a href="/ProductClient/Shop"
+                           class="btn btn-secondary">
+                            TIẾP TỤC MUA HÀNG
+                        </a>
+
+                    </div>
+
+                    <div class="col-12 col-md-6 text-right">
+
+                        <h4>
+                            Tổng tiền:
+                            <strong>
+                                @total.ToString("N0") VNĐ
+                            </strong>
+                        </h4>
+
+                        <a href="/ProductClient/Checkout"
+                           class="btn btn-primary"
+                           style="margin-top: 15px;">
+                            THANH TOÁN
+                        </a>
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>
